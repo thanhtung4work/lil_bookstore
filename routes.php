@@ -1,8 +1,13 @@
 <?php
 $controllers = array(
-  'pages' => ['home', 'error', 'login', 'signup'],
-  'books' => ['index', 'showBook', 'addBook', 'submitAdd'],
-  'customer' => ['submitLogin', 'submitLogout']
+  'pages' => ['home', 'error', 'login', 'signup', 'employee'],
+  'books' => ['index', 'showBook', 'addBook', 'submitAdd', 'manage'],
+  'customer' => ['submitLogin', 'submitLogout', 'submitSignUp', 'viewInfo', 'buy'],
+  'cart' => ['index', 'add', 'clear'],
+  'orders' => ['history', 'details'],
+  'publisher' => ['index', 'add', 'submitAdd'],
+  'category' => ['index', 'add', 'submitAdd'],
+  'author' => ['index', 'add', 'submitAdd']
 ); // Các controllers trong hệ thống và các action có thể gọi ra từ controller đó.
 
 // Nếu các tham số nhận được từ URL không hợp lệ (không thuộc list controller và action có thể gọi

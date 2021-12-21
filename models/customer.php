@@ -59,7 +59,8 @@ class Customer{
       array(":username" => $username, ":password" => $password)
     );
     $cust = $req->fetch();
-    if( isset($cust) ){
+    print_r($cust);
+    if( $cust ){
       return self::newFromArray($cust);
     }
     return null;
@@ -67,9 +68,11 @@ class Customer{
 
   public function signup(){
     $db = DB::getInstance();
-    $req = $db->prepare("insert into sach values (:Ho, :Ten, :MSoDienThoai, :DiaChi, :Email, :TenDangNhap, :MatKhau)");
+    $req = $db->prepare("insert into khachhang values (:MaKH, :Ho, :Ten, :SoDienThoai, :DiaChi, :Email, :TenDangNhap, :MatKhau)");
     $req->execute(
-      array(":Ho" => $this->Ho, 
+      array(
+            ":MaKH" => $this->MaKH,
+            ":Ho" => $this->Ho, 
             ":Ten" => $this->Ten, 
             ":SoDienThoai" => $this->SoDienThoai,
             ":DiaChi" => $this->DiaChi, 

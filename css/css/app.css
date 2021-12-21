@@ -1,0 +1,36 @@
+.text-danger{
+  color: #ff0000;
+}
+
+.img-smol{
+  width: 70%;
+  margin: auto;
+  margin-bottom: 2%;
+}
+
+.app-section{
+  margin-top: 2%;
+}
+
+.app-logo *{
+  text-decoration-color: black;
+  color: black;
+  font-weight: 600;
+}
+
+.cart{
+  position: fixed;
+  bottom: 1vh;
+  right: 1.5vw;
+}
+
+.card{
+  padding: 1vh 1vw;
+}
+
+.mt-1{ margin-top: 5vh;}
+.mt-2{ margin-top: 4vh;}
+.mt-3{ margin-top: 3vh;}
+.mt-4{ margin-top: 2vh;}
+.mt-5{ margin-top: 1vh;}
+

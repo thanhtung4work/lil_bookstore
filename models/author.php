@@ -1,65 +1,59 @@
-<?php 
+<?php
 
-  class Author{
-    public $AuthorID;
-    public $AuthorName;
-    public $HomeTown;
+class Author{
+  public $MaTG;
+  public $TenTG;
+  public $ThongTin;
+  static public $table_name = "tac_gia";
 
-    function __construct()
-    {
-      
-    }
-
-    public static function makeNewAuthor($AuthorID, $AuthorName, $HomeTown){
-      $newAuthor = new Author();
-      $newAuthor->AuthorID = $AuthorID;
-      $newAuthor->AuthorName = $AuthorName;
-      $newAuthor->HomeTown = $HomeTown;
-
-      return $newAuthor;
-    }
-
-    /**
-    * @array  Associative Array only
-    */
-    public static function makeNewAuthorFromArray($array = array()){
-      $newAuthor = new Author();
-      $newAuthor->AuthorID = $array['AuthorID'];
-      $newAuthor->AuthorName = $array['AuthorName'];
-      $newAuthor->HomeTown = $array['HomeTown'];
-
-      return $newAuthor;
-    }
-
-    public static function getProperties(){
-      return array(
-        'AuthorID' => ['type' => 'text'],
-        'AuthorName' => ['type' => 'text'],
-        'HomeTown' => ['type' => 'text']
-      );
-    }
-
-    public function add(){
-      $db = DB::getInstance();
-      $req = $db->prepare("insert into values (:MaTG, :TenTG, :QueQuan)");
-      $req->execute(
-        array('MaTG' => $this->AuthorID,
-              'TenTG' => $this->AuthorName,
-              ':QueQuan' => $this->HomeTown)
-      );
-    }
-
-    static function find($id){
-      $db = DB::getInstance();
-      $req = $db->prepare("select * from tacgia where MaTG = :id");
-      $req->execute(array('id'=>$id));
-
-      $item = $req->fetch();
-      if (isset($item)){
-        return self::makeNewAuthor($item['MaTG'], $item['TenTG'], $item['QueQuan']);
-      }
-      return null;
-    }
+  public function __construct($MaTG, $TenTG, $ThongTin)
+  {
+    $this->MaTG = $MaTG;
+    $this->TenTG = $TenTG;
+    $this->ThongTin = $ThongTin;
   }
 
-?>
+  public static function find($id){
+    $db = DB::getInstance();
+    //echo 'select * from theloai where MaTL = '. $id;
+    $req = $db->prepare('select * from tac_gia where MaTG = :id');
+    $req->execute(array('id'=>$id));
+    
+    $item = $req->fetch();
+    if (isset($item)){
+      return new Category($item['MaTG'], $item['TenTG'], $item['ThongTin']);
+    }
+
+    return null;
+  }
+
+  public static function getALL(){
+    $db = DB::getInstance();
+    //echo 'select * from theloai where MaTL = '. $id;
+    $req = $db->prepare('select * from '. self::$table_name);
+    $req->execute();
+    
+    $item = $req->fetchAll(PDO::FETCH_ASSOC);
+    return $item;
+  }
+
+  public static function getProperties(){
+    return array(
+      'MaTG' => ['type' => 'text', 'label'=> "Mã tác giả"],
+      'TenTG' => ['type' => 'text', 'label'=> "Tên tác giả"],
+      'ThongTin' => ['type' => 'text', 'label'=> "Thông tin"]
+    );
+  }
+
+  public function add(){
+    $db = DB::getInstance();
+    $req = $db->prepare("insert into ". self::$table_name ." values (:MaTG, :TenTG, :ThongTin)");
+    $req->execute(
+      [
+        ":MaTG" => $this->MaTG,
+        ":TenTG" => $this->TenTG,
+        ":ThongTin" => $this->ThongTin
+      ]
+    );
+  }
+}

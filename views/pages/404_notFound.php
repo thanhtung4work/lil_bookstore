@@ -1,5 +1,3 @@
-<?php 
+<h1>Không thể tìm thấy trang</h1>
 
-  echo '404: Khong the tim trang';
-
-?>
+<p>Lỗi Error 404 huyền thoại</p>

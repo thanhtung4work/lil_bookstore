@@ -1,5 +1,6 @@
 <?php
 require_once('controllers/base_controller.php');
+require_once 'models/book.php';
 
 class PagesController extends BaseController
 {
@@ -10,7 +11,8 @@ class PagesController extends BaseController
 
   public function home()
   {
-    $data = array();
+    $books = Book::getAll();
+    $data = ['books' => $books];
     $this->render('home', $data);
   }
 
@@ -27,5 +29,10 @@ class PagesController extends BaseController
   public function signup()
   {
     $this->render('signup');
+  }
+
+  public function employee()
+  {
+    $this->render('employee');
   }
 }

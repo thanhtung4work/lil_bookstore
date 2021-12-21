@@ -1,6 +1,12 @@
 
 <?php
 require_once('connection.php');
+require_once('models/book.php');
+require_once('models/publisher.php');
+require_once('models/category.php');
+require_once('models/author.php');
+
+session_start();
 define('ROOT_PATH', __DIR__);
 if (isset($_GET['controller'])) {
   $controller = $_GET['controller'];

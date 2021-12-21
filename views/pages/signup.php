@@ -3,10 +3,12 @@
 ?>
 <div class="grid-container">
 <h2>Đăng ký</h2>
-<form action="" class="callout grid-container">
+<form action="index.php?controller=customer&action=submitSignUp" method="POST" class="callout grid-container">
   <div class="grid-x grid-margin-x">
-    <?php foreach(Customer::getProperties() as $key => $value) { ?>
-      <div class="cell small-6 <?=($key=="MaKH")?"hide":""?>">
+    <?php foreach(Customer::getProperties() as $key => $value) { 
+      if($key == 'MaKH') continue;
+    ?>
+      <div class="cell small-6">
         <label for=""><?php echo $value['label']; ?></label>
         <input type="<?php echo $value['type']; ?>" name="<?php echo $key; ?>" required>
       </div>

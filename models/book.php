@@ -1,34 +1,23 @@
 <?php 
 class Book{
-  public string $BookID;
-  public string $BookName;
-  public string $AuthorID;
-  public string $PublisherID;
-  public string $CateID;
-  public string $Quantity;
-  public string $Price;
+  public string $MaSach;
+  public string $TenSach;
+  public string $MaNXB;
+  public string $SoLuong;
+  public string $DonGia;
   public $ImagePath;
+  public $ThongTin;
 
-  function __construct($id, $name, $authorID, $publisherID, $cateID,  $quantity, $price, $imagePath)
+  function __construct()
   {
-    $this->BookID = $id;
-    $this->BookName = $name;
-    $this->AuthorID = $authorID;
-    $this->PublisherID = $publisherID;
-    $this->CateID = $cateID;
-    $this->Quantity = $quantity;
-    $this->Price = $price;
-    $this->ImagePath = $imagePath;
+    
   }
 
   static function getAll(){
-    $list = [];
     $database = DB::getInstance();
     $req = $database->query('Select * from sach');
 
-    foreach ($req->fetchAll() as $item) {
-      $list[] = new Book($item['MaSach'], $item['TenSach'], $item['MaTG'], $item['MaNXB'],$item['MaTL'],  $item['SoLuong'], $item['DonGia'], $item['ImagePath']);
-    }
+    $list = $req->fetchAll(PDO::FETCH_ASSOC);
 
     return $list;
   }
@@ -40,37 +29,64 @@ class Book{
     
     $item = $req->fetch();
     if (isset($item)){
-      return new Book($item['MaSach'], $item['TenSach'], $item['MaTG'], $item['MaNXB'],$item['MaTL'],  $item['SoLuong'], $item['DonGia'], $item['ImagePath']);
+      return self::newFromArray($item);
     }
 
     return null;
   }
 
+  static function newFromArray($array = array()){
+    $newBook = new Book();
+    foreach(self::getProperties() as $key => $value){
+      $newBook->$key = $array[$key];
+    }
+    return $newBook;
+  }
+
   public function add(){
     $db = DB::getInstance();
-    $req = $db->prepare("insert into sach values (:MaSach, :TenSach, :MaTL, :MaTG, :MaNXB, :SoLuong, :DonGia, :ImagePath)");
+    $req = $db->prepare("insert into sach values (:MaSach, :TenSach, :MaNXB, :SoLuong, :DonGia, :ImagePath, :ThongTin)");
     $req->execute(
-      array(':MaSach' => $this->BookID,
-            ':TenSach' => $this->BookName,
-            ':MaTL' => $this->CateID,
-            ':MaTG' => $this->AuthorID,
-            ':MaNXB'=> $this->PublisherID,
-            ':SoLuong' => $this->Quantity,
-            ':DonGia' => $this->Price,
-            ':ImagePath' => $this->ImagePath
+      array(':MaSach' => $this->MaSach,
+            ':TenSach' => $this->TenSach,
+            ':MaNXB'=> $this->MaNXB,
+            ':SoLuong' => $this->SoLuong,
+            ':DonGia' => $this->DonGia,
+            ':ImagePath' => $this->ImagePath,
+            ':ThongTin' => $this->ThongTin
+      )
+    );
+  }
+
+  public function setBookAuthor($author_id){
+    $db = DB::getInstance();
+    $req = $db->prepare("insert into tac_gia_cua_sach values (:MaSach, :MaTG)");
+    $req->execute(
+      array(':MaSach' => $this->MaSach,
+            ':MaTG' => $author_id
+      )
+    );
+  }
+
+  public function setBookCategory($cate_id){
+    $db = DB::getInstance();
+    $req = $db->prepare("insert into the_loai_cua_sach values (:MaSach, :MaTL)");
+    $req->execute(
+      array(':MaSach' => $this->MaSach,
+            ':MaTL' => $cate_id
       )
     );
   }
 
   static function getProperties(){
     return array(
-        'BookID' => array('type' => 'text'), 
-        'BookName' => array('type' => 'text'), 
-        'CateID' => array('type' => 'text'), 
-        'AuthorID' => array('type' => 'text'), 
-        'PublisherID' => array('type' => 'text'), 
-        'Quantity' => array('type' => 'number'), 
-        'Price' => array('type' => 'number'), 
-        'ImagePath' => array('type' => 'text'));
+        'MaSach' => array('type' => 'text'), 
+        'TenSach' => array('type' => 'text'), 
+        'MaNXB' => array('type' => 'text'), 
+        'SoLuong' => array('type' => 'number'), 
+        'DonGia' => array('type' => 'number'), 
+        'ImagePath' => array('type' => 'file'),
+        'ThongTin' => array('type' => 'text')
+      );
   }
 }

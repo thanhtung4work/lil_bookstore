@@ -1,41 +1,33 @@
 <?php
 require_once 'controllers/base_controller.php';
-require_once 'models/book.php';
+require_once 'models/author.php';
 
-class AuthorsController extends BaseController
+class AuthorController extends BaseController
 {
   function __construct()
   {
-    $this->folder = 'authors';
+    $this->folder = 'author';
   }
 
   public function index()
   {
-    $books = Book::getAll();
-    $data = array('books' => $books);
+    $arr_tg = Author::getALL();
+    $data = array('data_tg' => $arr_tg);
     $this->render('index', $data);
   }
 
-  public function showBook(){
-    $book = Book::find($_GET['id']);
-    $data = array('book' => $book);
-    $this->render('show', $data);
-  }
 
-  public function addAuthor(){
+  public function add(){
     $this->render('add');
   }
 
   public function submitAdd(){
-    if( isset($_POST['BookID']) ){
-      $bookToAdd = new Book($_POST['BookID'], $_POST['BookName'], 
-                            $_POST['CateID'], $_POST['AuthorID'], 
-                            $_POST['PublisherID'], $_POST['Quantity'], 
-                            $_POST['Price'], $_POST['ImagePath']);
+    if( isset($_POST['MaTG']) ){
+      $new_tl = new Author($_POST['MaTG'], $_POST['TenTG'], $_POST['ThongTin']);
       
-      $bookToAdd->add();
+      $new_tl->add();
     }
 
-     header('Location: index.php?controller=books&action=addBook');
+     header('Location: index.php?controller=author&action=index');
   }
 }
